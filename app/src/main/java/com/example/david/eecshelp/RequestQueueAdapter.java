@@ -3,11 +3,13 @@ package com.example.david.eecshelp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -54,7 +56,9 @@ public class RequestQueueAdapter extends BaseAdapter implements View.OnClickList
     /********* Create a holder Class to contain inflated xml file elements *********/
     public static class ViewHolder{
         //This is where you put the references to the view
-
+        public TextView name;
+        public TextView location;
+        public TextView timestamp;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -72,7 +76,9 @@ public class RequestQueueAdapter extends BaseAdapter implements View.OnClickList
             holder = new ViewHolder();
 
             //Setup objects in view ie holder.txt = TextView vi.findviewbyid...
-
+            holder.name = (TextView) vi.findViewById(R.id.name);
+            holder.location = (TextView) vi.findViewById(R.id.location);
+            holder.timestamp = (TextView) vi.findViewById(R.id.timestamp);
             vi.setTag(holder);
         } else {
             holder = (ViewHolder) vi.getTag();
@@ -88,9 +94,36 @@ public class RequestQueueAdapter extends BaseAdapter implements View.OnClickList
             tempValues = (Request) data.get(position);
 
             //set the objects in view
-
-            vi.setOnClickListener(new AdapterView.OnItemClickListener(position));
+            holder.name.setText(tempValues.getName());
+            holder.location.setText(tempValues.getLocation());
+            holder.timestamp.setText(tempValues.getTimestamp());
+            vi.setOnClickListener(new OnItemClickListener(position));
         }
         return vi;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Log.v("CustomAdapter", "=====Row button clicked=====");
+    }
+
+    /********* Called when Item click in ListView ************/
+    private class OnItemClickListener  implements View.OnClickListener {
+        private int mPosition;
+
+        OnItemClickListener(int position){
+            mPosition = position;
+        }
+
+        @Override
+        public void onClick(View arg0) {
+
+
+            Queue sct = (Queue)activity;
+
+            /****  Call  onItemClick Method inside CustomListViewAndroidExample Class ( See Below )****/
+
+            sct.onItemClick(mPosition);
+        }
     }
 }

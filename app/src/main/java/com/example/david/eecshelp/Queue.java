@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class Queue extends ActionBarActivity  {
     ArrayList<Request> reqList;
-    ArrayAdapter<Request> arrayAdapter;
+    RequestQueueAdapter arrayAdapter;
 
     ListView queueListView;
 
@@ -27,7 +27,7 @@ public class Queue extends ActionBarActivity  {
         setContentView(R.layout.activity_queue);
 
         reqList =  new ArrayList<Request>();
-        arrayAdapter = new ArrayAdapter<Request>(this,android.R.layout.simple_list_item_1,reqList);
+        arrayAdapter = new RequestQueueAdapter(this,reqList,null);
         queueListView = (ListView) findViewById(R.id.queueListView);
 
         queueListView.setOnItemClickListener(new ListClickHandler());
@@ -42,6 +42,12 @@ public class Queue extends ActionBarActivity  {
         arrayAdapter.notifyDataSetChanged();
 
     }
+
+    public void onItemClick(int mPosition) {
+        Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_LONG).show();
+        launchDetailedView(mPosition);
+    }
+
     private class ListClickHandler implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> Adapter, View view, int position, long arg3) {
@@ -52,7 +58,7 @@ public class Queue extends ActionBarActivity  {
 
     private void launchDetailedView(int requestPos) {
         // TODO Auto-generated method stub
-        Request passingReq = arrayAdapter.getItem(requestPos);
+        Request passingReq = reqList.get(requestPos);
         Intent intent = new Intent(getBaseContext(),RequestActivity.class);
         intent.putExtra("requestObj",passingReq);
         this.startActivityForResult(intent,0);
